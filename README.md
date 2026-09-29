@@ -1,6 +1,8 @@
 # Healthcare Data Engineering Pipeline
 
-End-to-end Data Engineering project using Python, PySpark, SQL, and Databricks.
+An end-to-end healthcare data engineering project built using PySpark and Databricks.
+
+The project implements a layered data architecture using Bronze, Silver, and Gold layers to transform raw healthcare data into analytics-ready datasets and business insights.
 
 ## 📌 Project Overview
 
@@ -14,92 +16,128 @@ The pipeline performs data ingestion, transformation, cleaning, validation, and 
 
 - Python
 - PySpark
-- SQL
 - Databricks
 - Delta Lake
+- SQL
 - GitHub
 
-## 🏗️ Project Architecture
+## 📂 Data Sources
 
-```text
+The project uses the following healthcare datasets:
+
+- Patients
+- Encounters
+- Claims
+- Labs
+- Providers
+- Medications
+
+## 🏗️ Data Architecture
+
+The project follows a layered data architecture:
+
 Raw CSV Data
-     ↓
+↓
 Bronze Layer
-     ↓
+↓
 Silver Layer
-     ↓
+↓
 Gold Layer
-     ↓
+↓
 Business Insights
 
-📂 Data Sources
+## 🥉 Bronze Layer
 
-The project contains the following healthcare datasets:
+The Bronze layer contains the raw healthcare datasets without major transformations.
 
-Patients
-Encounters
-Claims
-Labs
-Providers
-Medications
+Raw CSV files are stored in:
 
-🥉 Bronze Layer
+`data/raw/`
 
-The Bronze layer contains the raw healthcare datasets before transformation.
+The Bronze layer preserves the original source data and serves as the starting point for the data pipeline.
 
-Raw files are stored in:
+## 🥈 Silver Layer
 
-data/raw/
+The Silver layer contains cleaned and transformed healthcare data.
 
-🥈 Silver Layer
+The following transformations were performed using PySpark:
 
-The Silver layer performs data cleaning and transformation.
+- Data type conversions
+- Null value handling
+- Duplicate removal
+- Data validation
+- Column transformations
+- Derived columns such as `Age`
+- Data standardization
 
-Key transformations include:
+The cleaned datasets are stored as Silver tables:
 
-Removing duplicate patient records
-Calculating patient age
-Converting columns to appropriate data types
-Extracting encounter year
-Cleaning and preparing healthcare datasets
-Creating Silver Delta tables
+- `silver_patients`
+- `silver_encounters`
+- `silver_claims`
+- `silver_providers`
+- `silver_labs`
+- `silver_medications`
 
-Silver transformation code:
+## 🥇 Gold Layer
 
-notebooks/02_silver_layer_transformations.py
+The Gold layer contains business-level aggregations and analytics-ready datasets created from the Silver layer.
 
-🥇 Gold Layer
+The following Gold tables were created:
 
-The Gold layer contains business-level aggregations and analytics-ready tables.
+- `gold_patient_summary`
+- `gold_encounter_summary`
+- `gold_claims_summary`
+- `gold_labs_summary`
+- `gold_medication_summary`
+- `gold_provider_summary`
 
-Gold Tables
-gold_patient_summary
-gold_encounter_summary
-gold_claims_summary
-gold_labs_summary
-gold_medication_summary
-gold_provider_summary
+## 📊 Business Insights
 
-An earlier gold_patient_analytics table is also present in the Databricks environment.
+The Gold layer is used to generate business-level healthcare insights, including:
 
-Gold transformation code:
+1. Claims by status
+2. Laboratory results
+3. Provider specialty
+4. Medication usage by duration
+5. Patient activity
+6. Patient insurance distribution
+7. Patients by city
+8. Encounters by department
+9. Encounters by type
+10. Total healthcare metrics
 
-notebooks/03_gold_layer_transformations.py
+## 🎯 Project Objective
 
-📊 Key Analytics
+The objective of this project is to demonstrate an end-to-end healthcare data engineering pipeline using PySpark and Databricks.
 
-The Gold layer provides analytics such as:
+The project focuses on:
 
-Total patient encounters
-Total claims
-Total claim amounts
-Total laboratory tests
-Abnormal laboratory results
-Total medications
-Provider specialty summaries
-Provider experience summaries
-Patient activity categories
+- Building a layered Bronze, Silver, and Gold architecture
+- Cleaning and transforming healthcare datasets
+- Creating analytics-ready Gold tables
+- Generating business-level healthcare insights
+- Applying data engineering concepts using PySpark
 
-🎯 Project Objective
+## 📁 Project Structure
 
-The objective of this project is to demonstrate an end-to-end healthcare data engineering workflow using PySpark and Databricks, following a layered data architecture and producing analytics-ready datasets.
+```text
+healthcare-data-engineering-pipeline/
+│
+├── data/
+│   └── raw/
+│       ├── patients.csv
+│       ├── encounters.csv
+│       ├── claims.csv
+│       ├── labs.csv
+│       ├── providers.csv
+│       └── medications.csv
+│
+├── notebooks/
+│   ├── 01_create_healthcare_data
+│   ├── 02_silver_layer_transformations
+│   ├── 03_gold_layer_transformations
+│   └── 04_business_insights
+│
+└── README.md
+```
