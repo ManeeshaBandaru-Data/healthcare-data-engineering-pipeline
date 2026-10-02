@@ -164,3 +164,18 @@ The completed pipeline successfully processed the healthcare datasets through th
 - Null values in the final Gold patient summary: 0
 - Gold patient summary records: 100
 - Silver and Gold tables validated using PySpark transformations and aggregations
+
+## 🛠️ Key Data Engineering Skills Demonstrated
+
+- PySpark DataFrame transformations
+- Data cleaning and validation
+- Handling null values and duplicates
+- Data type and schema management
+- Filtering, grouping, and aggregations
+- Joins and derived columns
+- Delta Lake tables
+- Bronze, Silver, and Gold architecture
+- Business-level aggregations
+- Data quality validation
+- Databricks notebook development
+- GitHub-based project versioning
