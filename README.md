@@ -134,10 +134,33 @@ healthcare-data-engineering-pipeline/
 │       └── medications.csv
 │
 ├── notebooks/
-│   ├── 01_create_healthcare_data
-│   ├── 02_silver_layer_transformations
-│   ├── 03_gold_layer_transformations
-│   └── 04_business_insights
+│   ├── 01_create_healthcare_data.ipynb
+│   ├── 02_silver_layer_transformations.py
+│   ├── 03_gold_layer_transformations.py
+│   └── 04_business_insights.py
 │
+├── .gitignore
 └── README.md
 ```
+## 📊 Project Results
+
+The completed pipeline successfully processed the healthcare datasets through the Bronze, Silver, and Gold layers.
+
+### Final Data Metrics
+
+| Metric | Total |
+|---|---:|
+| Patients | 100 |
+| Encounters | 200 |
+| Claims | 300 |
+| Total Claim Amount | 862,500 |
+| Lab Records | 400 |
+| Abnormal Lab Results | 267 |
+| Medication Records | 300 |
+
+### Data Quality Validation
+
+- Duplicate `Patient_ID` records: 0
+- Null values in the final Gold patient summary: 0
+- Gold patient summary records: 100
+- Silver and Gold tables validated using PySpark transformations and aggregations
