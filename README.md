@@ -179,3 +179,27 @@ The completed pipeline successfully processed the healthcare datasets through th
 - Data quality validation
 - Databricks notebook development
 - GitHub-based project versioning
+
+## 🔄 Project Workflow
+
+1. **Data Generation & Ingestion**
+   - Created healthcare datasets for patients, encounters, claims, labs, providers, and medications.
+   - Stored the raw CSV datasets in the project repository.
+
+2. **Bronze Layer**
+   - Loaded the source datasets into Databricks Delta tables.
+   - Preserved the raw data as the initial processing layer.
+
+3. **Silver Layer**
+   - Performed data cleaning and validation.
+   - Handled null values and duplicates.
+   - Applied data quality checks.
+   - Created derived columns such as `Age`, `Encounter_Year`, `Claim_Year`, `Experience_Category`, `Abnormal_Flag`, and `Duration_Category`.
+
+4. **Gold Layer**
+   - Created analytics-ready tables using PySpark aggregations and transformations.
+   - Built patient, encounter, claims, laboratory, medication, and provider summaries.
+
+5. **Business Insights**
+   - Generated healthcare metrics and analytical views from the Gold layer.
+   - Validated overall record counts and aggregate metrics.
