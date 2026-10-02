@@ -203,9 +203,3 @@ The completed pipeline successfully processed the healthcare datasets through th
 5. **Business Insights**
    - Generated healthcare metrics and analytical views from the Gold layer.
    - Validated overall record counts and aggregate metrics.
-
-## 🎯 Project Objective
-
-The objective of this project is to demonstrate an end-to-end healthcare data engineering pipeline using Python, PySpark, Databricks, Delta Lake, SQL, and GitHub.
-
-The project demonstrates how raw healthcare data can be transformed into clean, validated, analytics-ready datasets and used to generate business insights.
