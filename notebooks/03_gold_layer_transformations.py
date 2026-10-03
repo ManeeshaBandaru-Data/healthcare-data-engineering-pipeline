@@ -28,34 +28,40 @@ patient_summary_df = silver_patients_df.join(
     "left"
 )
 
-claims_summary_df = silver_claims_df.groupBy("Patient_ID").agg(
+patient_claims_summary_df = silver_claims_df.groupBy(
+    "Patient_ID"
+).agg(
     count("*").alias("Total_Claims"),
     sum("Claim_Amount").alias("Total_Claim_Amount")
 )
 
 patient_summary_df = patient_summary_df.join(
-    claims_summary_df,
+    patient_claims_summary_df,
     "Patient_ID",
     "left"
 )
 
-labs_summary_df = silver_labs_df.groupBy("Patient_ID").agg(
-    count("*").alias("Total_Lab_Tests"),
+patient_labs_summary_df = silver_labs_df.groupBy(
+    "Patient_ID"
+).agg(
+    count("*").alias("Total_Labs"),
     sum("Abnormal_Flag").alias("Abnormal_Lab_Results")
 )
 
 patient_summary_df = patient_summary_df.join(
-    labs_summary_df,
+    patient_labs_summary_df,
     "Patient_ID",
     "left"
 )
 
-medication_summary_df = silver_medications_df.groupBy("Patient_ID").agg(
+patient_medications_summary_df = silver_medications_df.groupBy(
+    "Patient_ID"
+).agg(
     count("*").alias("Total_Medications")
 )
 
 patient_summary_df = patient_summary_df.join(
-    medication_summary_df,
+    patient_medications_summary_df,
     "Patient_ID",
     "left"
 )
@@ -64,19 +70,27 @@ patient_summary_df = patient_summary_df.fillna({
     "Total_Encounters": 0,
     "Total_Claims": 0,
     "Total_Claim_Amount": 0,
-    "Total_Lab_Tests": 0,
+    "Total_Labs": 0,
     "Abnormal_Lab_Results": 0,
     "Total_Medications": 0
 })
 
-patient_summary_df = patient_summary_df.withColumn(
+patient_summary_final_df = patient_summary_df.withColumn(
     "Activity_Category",
-    when(col("Total_Encounters") >= 5, "High Activity")
-    .when(col("Total_Encounters") >= 3, "Medium Activity")
-    .otherwise("Low Activity")
+    when(
+        (col("Total_Encounters") >= 5) |
+        (col("Total_Claims") >= 5) |
+        (col("Total_Labs") >= 5),
+        "High Activity"
+    ).when(
+        (col("Total_Encounters") >= 3) |
+        (col("Total_Claims") >= 3) |
+        (col("Total_Labs") >= 3),
+        "Medium Activity"
+    ).otherwise("Low Activity")
 )
 
-patient_summary_df.write \
+patient_summary_final_df.write \
     .format("delta") \
     .mode("overwrite") \
     .option("overwriteSchema", "true") \
@@ -106,7 +120,7 @@ encounter_summary_df.write \
 # 4. CLAIMS SUMMARY
 # ------------------------------------------------------------
 
-claims_summary_gold_df = silver_claims_df.groupBy(
+claims_summary_df = silver_claims_df.groupBy(
     "Claim_Year",
     "Claim_Status"
 ).agg(
@@ -114,7 +128,7 @@ claims_summary_gold_df = silver_claims_df.groupBy(
     sum("Claim_Amount").alias("Total_Claim_Amount")
 )
 
-claims_summary_gold_df.write \
+claims_summary_df.write \
     .format("delta") \
     .mode("overwrite") \
     .option("overwriteSchema", "true") \
@@ -125,14 +139,14 @@ claims_summary_gold_df.write \
 # 5. LABS SUMMARY
 # ------------------------------------------------------------
 
-labs_summary_gold_df = silver_labs_df.groupBy(
+labs_summary_df = silver_labs_df.groupBy(
     "Result_Status"
 ).agg(
     count("*").alias("Total_Lab_Tests"),
     sum("Abnormal_Flag").alias("Abnormal_Lab_Results")
 )
 
-labs_summary_gold_df.write \
+labs_summary_df.write \
     .format("delta") \
     .mode("overwrite") \
     .option("overwriteSchema", "true") \
@@ -143,13 +157,13 @@ labs_summary_gold_df.write \
 # 6. MEDICATION SUMMARY
 # ------------------------------------------------------------
 
-medication_summary_gold_df = silver_medications_df.groupBy(
+medication_summary_df = silver_medications_df.groupBy(
     "Duration_Category"
 ).agg(
     count("*").alias("Total_Medications")
 )
 
-medication_summary_gold_df.write \
+medication_summary_df.write \
     .format("delta") \
     .mode("overwrite") \
     .option("overwriteSchema", "true") \
@@ -160,15 +174,13 @@ medication_summary_gold_df.write \
 # 7. PROVIDER SUMMARY
 # ------------------------------------------------------------
 
-provider_summary_gold_df = silver_providers_df.groupBy(
-    "Specialty",
-    "Experience_Category"
+provider_summary_df = silver_providers_df.groupBy(
+    "Specialty"
 ).agg(
-    count("*").alias("Total_Providers"),
-    sum("Experience_Years").alias("Total_Experience_Years")
+    count("*").alias("Total_Providers")
 )
 
-provider_summary_gold_df.write \
+provider_summary_df.write \
     .format("delta") \
     .mode("overwrite") \
     .option("overwriteSchema", "true") \
