@@ -113,7 +113,7 @@ Data quality checks include:
 - Duplicate detection/removal
 - Category validation
 - Numeric value validation
-- Data standardization
+- Business-rule validation
 
 ---
 
@@ -255,3 +255,4 @@ healthcare-data-engineering-pipeline/
 │
 ├── .gitignore
 └── README.md
+```
